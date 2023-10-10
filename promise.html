@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Promise</title>
+</head>
+<style>
+    body{
+        background-color: #8a8a72;
+        color: white;
+        width: auto;
+        height: 100vh;
+        align-items: center;
+        display: flex;
+        justify-content: center;
+        flex-direction: column;
+    }
+    input{
+        width: 30%;
+        height: 30px;
+        border: 1px solid grey;
+        border-radius: 5px;
+        margin-bottom: 10px;
+        outline: none;
+    }
+    input::placeholder{
+        text-align: center;
+    }
+    button{
+        padding: 10px;
+        border: 1px solid grey;
+        border-radius: 5px;
+    }
+
+</style>
+<body>
+
+    <h1>Promise Downloader</h1>
+    <input type="text" id="url" name="url" placeholder="Paste File Link Address">
+    <button id="btn" onclick="downloadFile()" >Download</button>
+
+
+    <script>
+
+        // Promise Assignment
+
+        let urlLink = document.getElementById('url');
+        let downloadButton = document.getElementById('btn');
+
+            function downloadFile() {
+            return new Promise(async (resolve, reject) => {
+                try {
+                let res = await fetch(urlLink.value);
+                let linkFile = await res.blob();
+                let link = document.createElement('a');
+                link.href = URL.createObjectURL(linkFile);
+                link.download = new Date().getTime();
+                resolve();
+                link.click()
+                } 
+                catch (error) {
+                reject(alert('Error:Download Failed'));
+                }
+            });
+            }
+
+            downloadButton.addEventListener('click', () => {
+            downloadFile()
+                .then(() => {
+                console.log('Download successful');
+                })
+                .catch((error) => {
+                console.log("Download Failed");
+                console.error(error);
+                });
+            });
+    </script>
+</body>
+</html>

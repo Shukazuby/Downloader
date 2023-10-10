@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Callback</title>
+</head>
+<style>
+    body{
+        background-color: #8a8a72;
+        color: white;
+        width: auto;
+        height: 100vh;
+        align-items: center;
+        display: flex;
+        justify-content: center;
+        flex-direction: column;
+    }
+    input{
+        width: 30%;
+        height: 30px;
+        border: 1px solid grey;
+        border-radius: 5px;
+        margin-bottom: 10px;
+        outline: none;
+    }
+    input::placeholder{
+        text-align: center;
+    }
+    button{
+        padding: 10px;
+        border: 1px solid grey;
+        border-radius: 5px;
+    }
+
+</style>
+<body>
+
+    <!-- <h2>Async Assign</h2> -->
+    <h1>CallBack Downloader</h1>
+    <input type="text" id="url" name="url" placeholder="Paste File Link Address">
+    <button id="btn" onclick="downloadFile()" >Download</button>
+
+
+    <script>
+
+        // Callback Assignment
+
+        let urlLink = document.getElementById('url');
+        let downloadButton = document.getElementById('btn');
+
+        function downloadFile(callback) {
+        async function downloadInner() {
+            try {
+            let res = await fetch(urlLink.value);
+            let linkFile = await res.blob();
+            let link = document.createElement('a');
+            link.href = URL.createObjectURL(linkFile);
+            link.download = new Date().getTime();
+            callback(null);
+            link.click() 
+            } 
+            catch (error) {
+            callback(console.log('Download Failed'));
+            }
+        }
+
+        downloadInner(); 
+        }
+
+        downloadButton.addEventListener('click', () => {
+        downloadFile((error) => {
+            if (!error) {
+            console.log('Download successful');
+            } else {
+            console.log("Download Failed");
+            console.error(error);
+            }
+        });
+        });
+
+
+    </script>
+</body>
+</html>
